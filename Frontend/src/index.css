@@ -1,0 +1,250 @@
+/* Global Design System (Light Theme) — v2.0
+   Constraints: CSS only. No markup changes.
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ────────────────────────────────────────────────────────────────
+   Design Tokens
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Palette */
+  --bg: #F7F9FC;
+  --surface: #FFFFFF;
+  --surface-2: #F1F5FB;
+  --text: #0F172A;
+  --muted: #475569;
+  --muted-2: #64748B;
+  --border: rgba(15, 23, 42, 0.10);
+  --border-2: rgba(15, 23, 42, 0.14);
+
+  --primary: #2563EB;
+  --primary-2: #1D4ED8;
+  --primary-soft: rgba(37, 99, 235, 0.10);
+
+  --success: #16A34A;
+  --success-soft: rgba(22, 163, 74, 0.12);
+
+  --warning: #F59E0B;
+  --warning-soft: rgba(245, 158, 11, 0.14);
+
+  --danger: #DC2626;
+  --danger-soft: rgba(220, 38, 38, 0.12);
+
+  /* Premium neutrals */
+  --shadow-1: 0 1px 2px rgba(2, 6, 23, 0.06);
+  --shadow-2: 0 10px 30px rgba(2, 6, 23, 0.10);
+  --shadow-3: 0 20px 60px rgba(2, 6, 23, 0.14);
+
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.70);
+
+  /* Radii */
+  --r-xs: 10px;
+  --r-sm: 14px;
+  --r-md: 18px;
+  --r-lg: 26px;
+  --r-xl: 34px;
+  --r-full: 999px;
+
+  /* Spacing scale */
+  --space-1: 6px;
+  --space-2: 10px;
+  --space-3: 14px;
+  --space-4: 18px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 40px;
+  --space-8: 56px;
+  --space-9: 72px;
+
+  /* Typography */
+  --font: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --font-display: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+  --h1: clamp(2.0rem, 3.5vw, 3.25rem);
+  --h2: clamp(1.45rem, 2.4vw, 2.15rem);
+  --h3: 1.15rem;
+  --body: 0.98rem;
+  --small: 0.86rem;
+  --micro: 0.78rem;
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --d-1: 120ms;
+  --d-2: 200ms;
+  --d-3: 320ms;
+  --ring: 0 0 0 4px rgba(37, 99, 235, 0.22);
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Reset + Base
+   ───────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
+}
+
+body {
+  font-family: var(--font);
+  background: radial-gradient(1200px 700px at 18% -10%, rgba(37, 99, 235, 0.10), transparent 55%),
+              radial-gradient(900px 500px at 95% 8%, rgba(29, 78, 216, 0.10), transparent 60%),
+              var(--bg);
+  color: var(--text);
+  min-height: 100svh;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+#root {
+  min-height: 100svh;
+  isolation: isolate;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: var(--font);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+  border-radius: 10px;
+}
+
+::selection {
+  background: rgba(37, 99, 235, 0.16);
+  color: var(--text);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(2, 6, 23, 0.03);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(2, 6, 23, 0.18);
+  border-radius: 999px;
+  border: 2px solid rgba(247, 249, 252, 1);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(2, 6, 23, 0.28);
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Global Motion Defaults
+   ───────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  :where(a, button, input, textarea, select) {
+    transition:
+      background var(--d-2) var(--ease),
+      color var(--d-2) var(--ease),
+      border-color var(--d-2) var(--ease),
+      box-shadow var(--d-2) var(--ease),
+      transform var(--d-2) var(--ease),
+      filter var(--d-2) var(--ease);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Utilities
+   ───────────────────────────────────────────────────────────── */
+.bb-container {
+  width: min(1200px, 100% - 2 * var(--space-4));
+  margin: 0 auto;
+}
+
+.bb-elevate {
+  box-shadow: var(--shadow-1);
+}
+
+.bb-elevate-2 {
+  box-shadow: var(--shadow-2);
+}
+
+.bb-pill {
+  border-radius: var(--r-full);
+}
+
+.bb-glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Default Form Controls (class-agnostic)
+   ───────────────────────────────────────────────────────────── */
+input,
+textarea,
+select {
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--text);
+  border-radius: var(--r-sm);
+  padding: 10px 12px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(71, 85, 105, 0.75);
+}
+
+button {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Shared Animations
+   ───────────────────────────────────────────────────────────── */
+@keyframes bbFadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.bb-anim-in {
+  animation: bbFadeUp var(--d-3) var(--ease-soft) both;
+}
+
+/* Gradient helper */
+.bb-gradient-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+}
+
