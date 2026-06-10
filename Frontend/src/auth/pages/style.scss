@@ -1,381 +1,509 @@
-/* Premium Auth Pages — v2 (Light Theme)
-   CSS/SCSS only. Uses existing classNames.
-*/
+// ============================================
+// DESIGN TOKENS
+// ============================================
+$primary:        #6C63FF;
+$primary-dark:   #4B44CC;
+$primary-light:  #A89CFF;
+$accent:         #FF6584;
+$bg-deep:        #0D0D1A;
+$bg-card:        #13132B;
+$bg-input:       #1C1C3A;
+$text-main:      #F0EFF8;
+$text-muted:     #8A89B0;
+$border-color:   rgba(108, 99, 255, 0.25);
+$success:        #43E97B;
+$error:          #FF6584;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+// ============================================
+// FONTS
+// ============================================
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap');
 
-/* Tokens */
-$bg: #F7F9FC;
-$text: #0F172A;
-$muted: #475569;
-$text-soft: #64748B;
-$border: rgba(15, 23, 42, 0.12);
-$border-2: rgba(15, 23, 42, 0.18);
-$primary: #2563EB;
-$primary-2: #1D4ED8;
-$success: #16A34A;
-$shadow: 0 24px 70px rgba(2, 6, 23, 0.14);
+// ============================================
+// KEYFRAME ANIMATIONS
+// ============================================
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-$radius: 22px;
-$radius-sm: 14px;
+@keyframes floatBlob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(18px, -22px) scale(1.05); }
+  66%       { transform: translate(-14px, 12px) scale(0.97); }
+}
 
-$focus: 0 0 0 4px rgba(37, 99, 235, 0.22);
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
 
-/* Global-ish reset for this stylesheet */
-* { box-sizing: border-box; }
+@keyframes inputFocusLine {
+  from { width: 0; }
+  to   { width: 100%; }
+}
 
-/* ────────────────────────────────────────────────────────────────
-   Auth Page Layout
-   ───────────────────────────────────────────────────────────── */
-.login-page,
-.register-page {
-  min-height: 100svh;
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes blobPulse {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 0.75; }
+}
+
+// ============================================
+// GLOBAL RESET
+// ============================================
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: $bg-deep;
+  color: $text-main;
+  -webkit-font-smoothing: antialiased;
+}
+
+// ============================================
+// SHARED PAGE WRAPPER
+// ============================================
+%page-base {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 22px 16px;
-  background:
-    radial-gradient(1000px 650px at 15% 0%, rgba(37, 99, 235, 0.12), transparent 60%),
-    radial-gradient(900px 520px at 92% 18%, rgba(22, 163, 74, 0.10), transparent 55%),
-    $bg;
+  background: $bg-deep;
+  padding: 24px 16px;
   position: relative;
   overflow: hidden;
+
+  // Ambient blobs
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    animation: floatBlob 9s ease-in-out infinite, blobPulse 6s ease-in-out infinite;
+  }
+
+  &::before {
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba($primary, 0.35), transparent 70%);
+    top: -80px;
+    left: -80px;
+  }
+
+  &::after {
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba($accent, 0.25), transparent 70%);
+    bottom: -60px;
+    right: -60px;
+    animation-delay: -4s;
+  }
 }
 
-.login-page::before,
-.register-page::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image: radial-gradient(rgba(15, 23, 42, 0.12) 1px, transparent 1px);
-  background-size: 34px 34px;
-  opacity: 0.26;
-}
-
-.login-container,
-.register-container {
+// ============================================
+// SHARED CARD
+// ============================================
+%card-base {
+  background: $bg-card;
+  border: 1px solid $border-color;
+  border-radius: 20px;
+  padding: 44px 40px;
   width: 100%;
   max-width: 460px;
   position: relative;
   z-index: 1;
+  animation: fadeInUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  box-shadow:
+    0 0 0 1px rgba($primary, 0.08),
+    0 24px 60px rgba(0, 0, 0, 0.55),
+    0 0 80px rgba($primary, 0.06);
+
+  // Top shimmer bar
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    border-radius: 0 0 4px 4px;
+    background: linear-gradient(90deg, transparent, $primary, $primary-light, $accent, transparent);
+    background-size: 200% auto;
+    animation: shimmer 3s linear infinite;
+  }
 }
 
-.login-left,
-.register-left {
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  border: 1px solid rgba(15, 23, 42, 0.10);
-  border-radius: $radius;
-  box-shadow: $shadow;
-  padding: 36px 28px;
+// ============================================
+// SHARED TITLE / SUBTITLE
+// ============================================
+%title-base {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: $text-main;
+  line-height: 1.2;
+  margin-bottom: 10px;
+  animation: fadeInUp 0.6s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  span {
+    background: linear-gradient(135deg, $primary-light 0%, $primary 40%, $accent 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 }
 
-/* Brand mark */
-.auth-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 18px;
+%subtitle-base {
+  font-size: 0.925rem;
+  color: $text-muted;
+  margin-bottom: 32px;
+  line-height: 1.6;
+  animation: fadeInUp 0.6s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.auth-brand .brand-dot {
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, $primary 0%, $primary-2 100%);
-  box-shadow: 0 16px 40px rgba(37, 99, 235, 0.28);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.auth-brand .brand-dot::after {
-  content: '';
-  width: 16px;
-  height: 16px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.9);
-}
-
-.auth-brand .brand-name {
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  font-weight: 900;
-  font-size: 1.15rem;
-  letter-spacing: -0.02em;
-  color: $text;
-}
-
-/* Titles */
-.login-title,
-.register-title {
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  line-height: 1.12;
-  color: $text;
-  font-size: 2.15rem;
-  margin-bottom: 8px;
-}
-
-.login-title span,
-.register-title span {
-  background: linear-gradient(135deg, $primary-2 0%, #16A34A 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.login-subtitle,
-.register-subtitle {
-  font-size: 0.96rem;
-  color: $text-soft;
-  line-height: 1.75;
-  font-weight: 500;
-  margin-bottom: 22px;
-}
-
-/* Form */
-.login-form,
-.register-form {
+// ============================================
+// SHARED FORM ELEMENTS
+// ============================================
+%form-base {
   display: flex;
   flex-direction: column;
+  gap: 20px;
 }
 
 .form-group {
-  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @for $i from 1 through 4 {
+    &:nth-child(#{$i}) { animation-delay: #{0.18 + $i * 0.08}s; }
+  }
 }
 
 .form-label {
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.10em;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(71, 85, 105, 0.95);
-  margin-bottom: 7px;
+  color: $text-muted;
+  transition: color 0.2s;
 }
 
 .form-input {
   width: 100%;
-  height: 46px;
-  border-radius: $radius-sm;
-  border: 1px solid $border;
-  background: rgba(255, 255, 255, 0.92);
-  padding: 0 14px;
-  font-size: 0.96rem;
-  font-weight: 600;
-  color: $text;
-  transition: box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
-}
-
-.form-input::placeholder {
-  color: rgba(71, 85, 105, 0.65);
-  font-weight: 500;
-}
-
-.form-input:hover {
-  border-color: $border-2;
-  background: rgba(255, 255, 255, 1);
-}
-
-.form-input:focus {
-  border-color: rgba(37, 99, 235, 0.45);
-  box-shadow: $focus;
+  padding: 13px 16px;
+  background: $bg-input;
+  border: 1.5px solid rgba($primary, 0.2);
+  border-radius: 12px;
+  color: $text-main;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
   outline: none;
-  background: rgba(255, 255, 255, 1);
+  transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+  position: relative;
+
+  &::placeholder {
+    color: rgba($text-muted, 0.55);
+    font-size: 0.88rem;
+  }
+
+  &:hover {
+    border-color: rgba($primary, 0.45);
+  }
+
+  &:focus {
+    border-color: $primary;
+    background: rgba($primary, 0.06);
+    box-shadow:
+      0 0 0 3px rgba($primary, 0.15),
+      inset 0 1px 3px rgba(0, 0, 0, 0.2);
+
+    ~ .form-label {
+      color: $primary-light;
+    }
+  }
+
+  // Autofill override
+  &:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 50px $bg-input inset;
+    -webkit-text-fill-color: $text-main;
+  }
 }
 
-/* Remember me */
+// ============================================
+// SHARED PRIMARY BUTTON
+// ============================================
+%btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, $primary 0%, $primary-dark 100%);
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.18s, box-shadow 0.18s;
+  animation: fadeInUp 0.5s 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  // Shine swipe
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.18), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.5s;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba($primary, 0.5);
+
+    &::after { left: 130%; }
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba($primary, 0.35);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// ============================================
+// FOOTER TEXT (signup / login hint)
+// ============================================
+%footer-text {
+  text-align: center;
+  font-size: 0.875rem;
+  color: $text-muted;
+  animation: fadeInUp 0.5s 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  a {
+    color: $primary-light;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 5px;
+    transition: color 0.2s;
+
+    &:hover { color: $accent; text-decoration: underline; }
+  }
+}
+
+// ============================================
+// LOGIN PAGE
+// ============================================
+.login-page {
+  @extend %page-base;
+}
+
+.login-container {
+  @extend %card-base;
+}
+
+.login-left {
+  // inner wrapper — no extra styles needed, card handles it
+}
+
+.login-title {
+  @extend %title-base;
+}
+
+.login-subtitle {
+  @extend %subtitle-base;
+}
+
+.login-form {
+  @extend %form-base;
+}
+
 .form-options {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
+  animation: fadeInUp 0.5s 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  .remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: $text-muted;
+    cursor: pointer;
+    user-select: none;
+
+    input[type="checkbox"] {
+      accent-color: $primary;
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    label { cursor: pointer; }
+  }
+
+  .forgot-password {
+    font-size: 0.875rem;
+    color: $primary-light;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+
+    &:hover { color: $accent; }
+  }
 }
 
-.remember-me {
+.login-btn {
+  @extend %btn-primary;
+  width: 100%;
+}
+
+.signup-text {
+  @extend %footer-text;
+}
+
+// ============================================
+// REGISTER PAGE
+// ============================================
+.register-page {
+  @extend %page-base;
+}
+
+.register-container {
+  @extend %card-base;
+}
+
+.register-left {
+  // inner wrapper
+}
+
+.register-title {
+  @extend %title-base;
+}
+
+.register-subtitle {
+  @extend %subtitle-base;
+}
+
+.register-form {
+  @extend %form-base;
+}
+
+.register-btn {
+  @extend %btn-primary;
+  width: 100%;
+  background: linear-gradient(135deg, $success 0%, darken($success, 12%) 100%);
+  box-shadow: 0 0 0 rgba($success, 0.4);
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba($success, 0.45);
+  }
+}
+
+.login-text {
+  @extend %footer-text;
+}
+
+.login-link {
+  color: $primary-light;
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 5px;
+  transition: color 0.2s;
+
+  &:hover { color: $accent; }
+}
+
+// ============================================
+// LOADING STATE
+// ============================================
+.loading-screen {
+  min-height: 100vh;
   display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.remember-me input[type='checkbox'] {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 6px;
-  border: 1.5px solid rgba(15, 23, 42, 0.18);
-  background: rgba(15, 23, 42, 0.04);
-  display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
-}
+  background: $bg-deep;
+  gap: 16px;
 
-.remember-me input[type='checkbox']::after {
-  content: '';
-  width: 8px;
-  height: 4px;
-  border-left: 2px solid rgba(255, 255, 255, 0.0);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.0);
-  transform: rotate(-45deg);
-  opacity: 0;
-}
-
-.remember-me input[type='checkbox']:checked {
-  border-color: rgba(37, 99, 235, 0.55);
-  background: linear-gradient(135deg, $primary 0%, $primary-2 100%);
-  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.28);
-}
-
-.remember-me input[type='checkbox']:checked::after {
-  border-left-color: rgba(255, 255, 255, 0.96);
-  border-bottom-color: rgba(255, 255, 255, 0.96);
-  opacity: 1;
-}
-
-.remember-me label {
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: rgba(71, 85, 105, 0.95);
-}
-
-.forgot-password {
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: $primary;
-  transition: color 180ms ease, text-shadow 180ms ease;
-}
-
-.forgot-password:hover {
-  color: $primary-2;
-  text-shadow: 0 0 14px rgba(29, 78, 216, 0.18);
-}
-
-/* Primary CTA */
-.login-btn,
-.register-btn {
-  height: 48px;
-  border-radius: $radius-sm;
-  border: 1px solid rgba(37, 99, 235, 0.25);
-  background: linear-gradient(135deg, $primary 0%, $primary-2 100%);
-  color: #fff;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 0.82rem;
-  cursor: pointer;
-  box-shadow: 0 18px 55px rgba(37, 99, 235, 0.22);
-  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
-              box-shadow 180ms ease,
-              filter 180ms ease,
-              background 180ms ease;
-  margin-top: 6px;
-  margin-bottom: 16px;
-}
-
-.login-btn:hover,
-.register-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 24px 80px rgba(37, 99, 235, 0.28);
-  filter: saturate(1.05);
-}
-
-.login-btn:active,
-.register-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 18px 55px rgba(37, 99, 235, 0.20);
-}
-
-.login-btn:disabled,
-.register-btn:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* Signup / divider */
-.login-text,
-.signup-text {
-  text-align: center;
-  color: rgba(71, 85, 105, 0.95);
-  font-weight: 600;
-  font-size: 0.92rem;
-  margin-top: 10px;
-}
-
-.login-link,
-.signup-link {
-  color: $primary;
-  font-weight: 900;
-  transition: color 180ms ease, text-shadow 180ms ease, transform 180ms ease;
-  display: inline-block;
-}
-
-.login-link:hover,
-.signup-link:hover {
-  color: $primary-2;
-  text-shadow: 0 0 14px rgba(29, 78, 216, 0.18);
-  transform: translateX(2px);
-}
-
-.auth-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 18px 0;
-  color: rgba(71, 85, 105, 0.9);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.auth-divider::before,
-.auth-divider::after {
-  content: '';
-  height: 1px;
-  flex: 1;
-  background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.12), transparent);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .login-left,
-  .register-left {
-    padding: 30px 22px;
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    color: $text-muted;
+    font-weight: 400;
+    letter-spacing: 0.05em;
   }
 
+  &::before {
+    content: '';
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba($primary, 0.25);
+    border-top-color: $primary;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+// ============================================
+// RESPONSIVE — TABLET & MOBILE
+// ============================================
+@media (max-width: 520px) {
   .login-container,
   .register-container {
-    max-width: 440px;
-  }
-}
-
-@media (max-width: 480px) {
-  .login-page,
-  .register-page {
-    padding: 16px 10px;
-    align-items: flex-start;
-  }
-
-  .login-left,
-  .register-left {
-    padding: 26px 16px;
-    border-radius: 18px;
+    padding: 32px 22px;
+    border-radius: 16px;
   }
 
   .login-title,
   .register-title {
-    font-size: 1.85rem;
+    font-size: 1.65rem;
+  }
+
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 }
 
+// ============================================
+// REDUCED MOTION
+// ============================================
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

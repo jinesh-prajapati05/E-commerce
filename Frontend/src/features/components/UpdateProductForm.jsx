@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router";
 import useProduct from "../hooks/useProduct";
 import { useContext } from "react";
 import { ProductContext } from "../productContext";
-import "./AddProduct.css";
+import "./style/AddProduct.css";
 
 export default function UpdateProductForm() {
   const [searchParams] = useSearchParams();

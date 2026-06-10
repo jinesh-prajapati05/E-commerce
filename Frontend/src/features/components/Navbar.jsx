@@ -3,6 +3,8 @@ import useAuthUser from "../../auth/hooks/authUser";
 import { useContext } from "react";
 import { ProductContext } from "../productContext";
 import "../pages/Home.scss";
+import ProfileIcon from "./ProfileIcon";
+// import { AuthContext } from "../../auth/authContext";
 
 export default function Navbar() {
   const { handleLogout, user } = useAuthUser();
@@ -13,6 +15,8 @@ export default function Navbar() {
     await handleLogout();
     navigate("/login");
   };
+
+  console.log(user)
 
 
   return (
@@ -36,6 +40,7 @@ export default function Navbar() {
         <button onClick={handleSubmitLogout} className="logout-btn">
           Logout
         </button>
+        <ProfileIcon user={user} />
       </div>
     </div>
   );

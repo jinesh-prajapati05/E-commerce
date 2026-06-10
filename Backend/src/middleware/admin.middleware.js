@@ -10,7 +10,7 @@ export async function admin(req,res,next) {
     const isEmail = user.email === process.env.ADMIN_EMAIL
     const isRole = user.role === process.env.ROLE
     
-    if (!isUserName && !isEmail && !isRole) {
+    if (!isUserName || !isEmail || !isRole) {
         return res.status(404).json({
             message: "Access denied"
         })

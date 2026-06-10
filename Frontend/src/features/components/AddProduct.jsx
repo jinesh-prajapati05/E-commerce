@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./AddProduct.css";
+import "./style/AddProduct.css";
 import { useNavigate } from "react-router";
 import useProduct from "../hooks/useProduct";
 

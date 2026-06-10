@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import useAuthUser from "../../auth/hooks/authUser";
 import useProduct from "../hooks/useProduct";
-import "./ProductCard.css";
+import "./style/ProductCard.css";
 import { ProductContext } from "../productContext";
 import { Link } from "react-router";
 // import { useNavigate } from "react-router";

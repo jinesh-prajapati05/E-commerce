@@ -28,7 +28,7 @@ async function register(req, res) {
     });
 
     if (isAlreadyRegister) {
-      return res.status(409).json({
+      return res.status(400).json({
         message: "This username or email Already registerd.",
       });
     }
