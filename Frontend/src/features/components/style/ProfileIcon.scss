@@ -51,13 +51,14 @@
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  background: #13132B;
+  background: #f2f2f3;
   border: 1px solid rgba(108, 99, 255, 0.25);
   border-radius: 14px;
   min-width: 180px;
   z-index: 100;
   padding: 6px 0;
   animation: fadeInUp 0.2s ease both;
+  color: black;
 }
 
 .dropdown-header {
@@ -67,7 +68,7 @@
     font-family: 'Space Grotesk', sans-serif;
     font-size: 0.9rem;
     font-weight: 600;
-    color: #F0EFF8;
+    color: #000000;
   }
   .dropdown-email {
     font-size: 0.78rem;
