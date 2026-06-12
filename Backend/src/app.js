@@ -8,7 +8,7 @@ export const app = express()
 
 // CORS Option
 const corsOption = {
-    origin: "https://e-commerce-theta-seven-17.vercel.app",
+    origin: process.env.FRONTEND_URL,
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Institute-Code'],
     optionsSuccessStatus: 204,
