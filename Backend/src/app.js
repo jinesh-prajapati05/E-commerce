@@ -8,7 +8,7 @@ export const app = express()
 
 // CORS Option
 const corsOption = {
-    origin: "http://localhost:5173",
+    origin: "https://e-commerce-git-main-jinesh-s-projects-ff406378.vercel.app",
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
     optionsSuccessStatus: 200,
