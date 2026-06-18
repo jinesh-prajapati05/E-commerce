@@ -17,12 +17,6 @@ async function register(req, res) {
       role = "admin";
     }
 
-    if (!userName || !email || !password) {
-      return res.status(400).json({
-        message: "Plese Enter username, email and password!",
-      });
-    }
-
     const isAlreadyRegister = await userModel.findOne({
       $or: [{ userName }, { email }],
     });
@@ -76,12 +70,6 @@ async function register(req, res) {
 async function login(req, res) {
   try {
     const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(404).json({
-        message: "Plese Enter emai or password.",
-      });
-    }
 
     const user = await userModel.findOne({ email });
 

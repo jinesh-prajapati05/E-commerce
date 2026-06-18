@@ -24,21 +24,6 @@ async function createProduct(req, res) {
       productPrice !== undefined ? Number(productPrice) : productPrice;
     const parsedStock = stock !== undefined ? Number(stock) : stock;
 
-    if (
-      !productName ||
-      parsedProductPrice === undefined ||
-      parsedProductPrice === null ||
-      productDecsription === undefined ||
-      productDecsription === null ||
-      !category ||
-      parsedStock === undefined ||
-      parsedStock === null
-    ) {
-      return res.status(400).json({
-        message: "Please All field is required",
-      });
-    }
-
     cloudinary.config({
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
       api_key: process.env.CLOUDINARY_API_KEY,
@@ -90,7 +75,7 @@ async function deleteProduct(req, res) {
   try {
     const id = req.params.id;
 
-    const product = await productModel.deleteOne({ _id: id });
+    const product = await productModel.findByIdAndDelete({ _id: id });
 
     if (!product.deletedCount || product.deletedCount === 0) {
       return res.status(404).json({
