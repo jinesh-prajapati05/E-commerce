@@ -61,6 +61,8 @@
 }
 
 .cart-title {
+    text-align: center;
+    padding-top: 1rem;
   font-size: clamp(1.9rem, 3vw, 2.6rem);
   font-weight: 900;
   letter-spacing: -0.04em;
@@ -351,6 +353,11 @@
   font-size: 1.05rem;
   font-weight: 800;
   margin-bottom: 22px;
+}
+
+.cart-total {
+    color: black;
+    padding: 1rem 0;
 }
 
 /* Responsive */
