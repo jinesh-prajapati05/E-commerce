@@ -68,9 +68,11 @@ export default function ProductCard({ product }) {
         </div>
 
         <div className="product-actions">
+        {user?.role === "user" && 
           <button className="cart-btn" onClick={addedProduct}>
             Add To Cart
           </button>
+        }
           {user?.role === "admin" ? (
             <>
               <button className="edit-btn">

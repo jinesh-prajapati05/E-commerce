@@ -31,9 +31,11 @@ export default function Navbar() {
         )}
 
 
-        <Link to="/cart" className="add-product-btn">
-          Cart <span className="cart-count">{cartCount}</span>
-        </Link>
+        {user?.role === "user" && 
+            <Link to="/cart" className="add-product-btn">
+            Cart <span className="cart-count">{cartCount}</span>
+            </Link>
+        }
 
         <button onClick={handleSubmitLogout} className="logout-btn">
           Logout
